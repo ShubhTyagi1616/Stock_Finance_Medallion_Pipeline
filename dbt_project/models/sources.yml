@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: bronze
+    catalog: finance_medallion_pipeline
+    schema: bronze__raw_layer
+    tables:
+      - name: raw_daily_prices
+        description: "Raw daily OHLCV JSON from Alpha Vantage, one row per file, stored as a single VARIANT column (raw_json)."
+      - name: raw_company_overview
+        description: "Raw company fundamentals JSON from Alpha Vantage, one row per file, stored as a single VARIANT column (raw_json)."

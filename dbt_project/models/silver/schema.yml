@@ -1,0 +1,82 @@
+version: 2
+
+models:
+
+  # --- Intermediate (not consumed directly downstream) ---
+  - name: int_daily_prices_flagged
+    description: "Intermediate: typed, deduplicated daily prices with data quality flags computed. Feeds silver_daily_prices and its quarantine table."
+
+  - name: int_company_overview_flagged
+    description: "Intermediate: typed, deduplicated company fundamentals (30+ metrics) with data quality flags computed."
+
+  # --- Silver: daily prices ---
+  - name: silver_daily_prices
+    description: "Clean daily OHLCV data. One row per (symbol, trade_date). Hard-failure rows are excluded and live in silver_daily_prices_quarantine instead."
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: symbol
+        data_type: string
+        tests:
+          - not_null
+      - name: trade_date
+        data_type: date
+        tests:
+          - not_null
+      - name: open
+        data_type: double
+      - name: high
+        data_type: double
+      - name: low
+        data_type: double
+      - name: close
+        data_type: double
+        tests:
+          - not_null
+      - name: volume
+        data_type: bigint
+        tests:
+          - not_null
+      - name: flag_zero_volume
+        data_type: boolean
+      - name: flag_missing_company_overview
+        data_type: boolean
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - trade_date
+
+  - name: silver_daily_prices_quarantine
+    description: "Rows from Bronze that failed a hard data quality check (missing required fields, impossible OHLC, negative volume, or future date). Kept for investigation."
+
+  # --- Silver: company overview ---
+  - name: silver_company_overview
+    description: "Clean company fundamentals with 30+ metrics: valuation ratios, profitability, growth, price-history stats. One row per symbol. Hard-failure rows live in silver_company_overview_quarantine instead."
+    columns:
+      - name: symbol
+        tests:
+          - not_null
+          - unique
+      - name: sector
+        tests:
+          - not_null
+      - name: market_cap
+        tests:
+          - not_null
+      - name: trailing_pe
+      - name: forward_pe
+      - name: peg_ratio
+      - name: beta
+      - name: week_52_high
+      - name: week_52_low
+      - name: moving_avg_50d
+      - name: moving_avg_200d
+      - name: flag_unexpected_sector
+      - name: flag_negative_pe
+      - name: flag_extreme_profit_margin
+      - name: flag_stale_fundamentals
+
+  - name: silver_company_overview_quarantine
+    description: "Rows from Bronze that failed a hard check: missing symbol/sector, non-USD currency, invalid market cap, or impossible 52-week high/low."

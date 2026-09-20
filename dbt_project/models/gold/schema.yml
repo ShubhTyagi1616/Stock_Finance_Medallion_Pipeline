@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_company
+    description: "Gold dimension: one row per company symbol."
+    columns:
+      - name: symbol
+        tests:
+          - not_null
+          - unique
+      - name: sector
+        tests:
+          - not_null
+
+  - name: fact_daily_prices
+    description: "Gold fact: one row per (symbol, trade_date), joined with sector."
+    columns:
+      - name: symbol
+        tests:
+          - not_null
+          # Check #7: relationships test proves the join to dim_company
+          # cannot silently inflate rows or point to a non-existent company
+          - relationships:
+              to: ref('dim_company')
+              field: symbol
+      - name: trade_date
+        tests:
+          - not_null
+      - name: close
+        tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - trade_date
+
+  - name: fact_daily_returns
+    description: "Gold fact: daily return %, moving average, rolling volatility per (symbol, trade_date)."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - trade_date
+
+  - name: agg_sector_rollup
+    description: "Gold aggregate: sector-level daily average return, volatility, and volume."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - sector
+            - trade_date

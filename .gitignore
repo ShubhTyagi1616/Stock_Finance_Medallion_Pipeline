@@ -1,0 +1,11 @@
+.env
+dbt_project/profiles.yml
+dashboard/.streamlit/secrets.toml
+venv/
+__pycache__/
+*.pyc
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+airflow_docker/logs/
+logs/
