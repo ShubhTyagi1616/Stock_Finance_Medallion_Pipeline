@@ -8,7 +8,7 @@ An end-to-end, production-style data pipeline that ingests real daily stock mark
 ![Airflow](https://img.shields.io/badge/Airflow-3.3-teal)
 ![Streamlit](https://img.shields.io/badge/Streamlit-live%20dashboard-ff4b4b)
 
-**🔗 Live dashboard:** [https://stockfinancemedallionpipeline-w7tmzgq5mbhugipcp3ywi7.streamlit.app/](https://Stock_Finance_Medallion_Pipeline.streamlit.app)
+**🔗 Live dashboard:** [https://stockfinancemedallionpipeline-w7tmzgq5mbhugipcp3ywi7.streamlit.app](https://Stock_Finance_Medallion_Pipeline.streamlit.app)
 **📁 Repository:** this repo
 
 ---
