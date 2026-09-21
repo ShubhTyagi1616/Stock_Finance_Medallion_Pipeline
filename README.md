@@ -228,7 +228,7 @@ The dashboard (deployed live, link above) includes:
 
 ## 📸 Screenshots
 
-*(Add dashboard screenshots here once captured — e.g. `docs/screenshot_kpi.png`, `docs/screenshot_risk_return.png`)*
+![KPI & Sector Performance over time](docs/Screenshot 2026-09-21 153558.png)
 
 ## 🚀 How to Run
 
