@@ -307,6 +307,6 @@ Medallion architecture · idempotent ingestion · schema-agnostic raw landing (V
 ## 👨‍💻 Author
 
 **Shubham Tyagi**
-[github](https://github.com/ShubhTyagi1616)
-[linkedin](https://www.linkedin.com/in/shubham-tyagi-947b49400/)
-[Stock_Finance_Medallion_Pipeline](https://stockfinancemedallionpipeline-w7tmzgq5mbhugipcp3ywi7.streamlit.app/)
+![github](https://github.com/ShubhTyagi1616)
+![linkedin](https://www.linkedin.com/in/shubham-tyagi-947b49400/)
+![Stock_Finance_Medallion_Pipeline](https://stockfinancemedallionpipeline-w7tmzgq5mbhugipcp3ywi7.streamlit.app/)
