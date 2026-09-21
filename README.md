@@ -228,7 +228,7 @@ The dashboard (deployed live, link above) includes:
 
 ## 📸 Screenshots
 
-![KPI & Sector Performance over time](docs/Screenshot 2026-09-21 153558.png)
+![KPI & Sector Performance over time](docs/KPI_Sector_performace.png)
 
 ## 🚀 How to Run
 
