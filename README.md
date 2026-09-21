@@ -229,6 +229,12 @@ The dashboard (deployed live, link above) includes:
 ## 📸 Screenshots
 
 ![KPI & Sector Performance over time](docs/KPI_Sector_performace.png)
+![Risk vs Return](docs/Risk_vs_Return.png)
+![Company Explorer](docs/Company_Explorer.png)
+![Price & Cumulative Return](docs/Price_Cumulative_Return_Chart.png)
+![Golden_Death_Cross_Top_Movers](docs/Golden_Death_Cross_Top_Movers.png)
+![Valuation_Profitability_Comparison](docs/Valuation_Profitability_Comparison.png)
+![Data_Quality_Pipeline_Health](docs/Data_Quality_Pipeline_Health.png)
 
 ## 🚀 How to Run
 
