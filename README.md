@@ -78,17 +78,74 @@ Alpha Vantage API
 
 ```
 finance-medallion-pipeline/
-├── ingestion/              # Bronze: API pulls, Bronze table refresh
-├── dbt_project/            # Silver + Gold: all transformation logic
-│   ├── models/silver/
-│   ├── models/gold/
-│   └── tests/              # Singular reconciliation/freshness tests
-├── airflow_docker/         # Orchestration: DAGs, Dockerfile, compose
+│
+├── .env                              # Real secrets (gitignored, never committed)
+├── .env.example                      # Template showing required variables
+├── .gitignore                        # Excludes secrets, venv, and generated files
+├── README.md                         # Project overview, architecture, setup guide
+├── requirements.txt                  # Python dependencies for ingestion/dbt/dashboard
+├── .devcontainer/devcontainer.json   # GitHub Codespaces config (auto-added by GitHub)
+│
+├── ingestion/                        # BRONZE — raw API ingestion
+│   ├── fetch_prices.py                 # Pulls daily OHLCV from Alpha Vantage, idempotent
+│   ├── fetch_company_overview.py       # Pulls fundamentals (weekly, not daily)
+│   └── refresh_bronze_tables.py        # Rebuilds Bronze Delta tables from raw JSON
+│
+├── dbt_project/                      # SILVER + GOLD — all transformation logic
+│   ├── dbt_project.yml                 # Project config, schema/materialization rules
+│   ├── packages.yml                    # dbt_utils dependency
+│   ├── models/
+│   │   ├── sources.yml                   # Declares Bronze tables as dbt sources
+│   │   ├── silver/
+│   │   │   ├── int_company_overview_flagged.sql  # Types + flags fundamentals
+│   │   │   ├── silver_company_overview.sql        # Clean fundamentals output
+│   │   │   ├── silver_company_overview_quarantine.sql  # Rejected fundamentals rows
+│   │   │   ├── int_daily_prices_flagged.sql       # Explodes, types, flags prices
+│   │   │   ├── silver_daily_prices.sql            # Clean daily prices output
+│   │   │   ├── silver_daily_prices_quarantine.sql # Rejected price rows
+│   │   │   └── schema.yml                         # Silver tests + model contract
+│   │   └── gold/
+│   │       ├── dim_company.sql                    # Star schema dimension
+│   │       ├── fact_daily_prices.sql               # Fact table, symbol + trade_date grain
+│   │       ├── fact_daily_returns.sql              # Returns, moving avg, volatility, anomaly flag
+│   │       ├── agg_sector_rollup.sql               # Sector-level daily rollup
+│   │       ├── gold_pipeline_audit_log.sql         # Incremental run-history log
+│   │       └── schema.yml                          # Gold tests, relationships
+│   └── tests/                          # Singular reconciliation/freshness tests
+│       ├── assert_row_count_reconciliation.sql
+│       ├── assert_volume_aggregate_reconciliation.sql
+│       ├── assert_data_freshness.sql
+│       └── assert_no_large_date_gaps.sql
+│
+├── airflow_docker/                   # ORCHESTRATION — Airflow via Docker
+│   ├── docker-compose.yaml             # Airflow's official multi-container setup
+│   ├── Dockerfile                      # Extends Airflow image with project packages
+│   ├── .env                            # AIRFLOW_UID only, not sensitive
 │   └── dags/
-├── dashboard/               # Streamlit app + modular sections/
-│   └── sections/
-├── docs/                   # Architecture diagram, screenshots
-└── requirements.txt
+│       ├── stock_pipeline_dag.py         # Daily DAG: fetch → refresh → silver → gold
+│       ├── overview_refresh_dag.py       # Weekly DAG: fundamentals refresh
+│       └── utils/
+│           └── alerts.py                   # Slack failure notification callback
+│
+├── dashboard/                        # PRESENTATION — Streamlit app
+│   ├── app.py                          # Orchestrator, sequences all sections
+│   ├── db.py                           # Databricks connection + query caching
+│   └── sections/                       # One module per dashboard section
+│       ├── kpi_header.py
+│       ├── sector_performance.py
+│       ├── risk_vs_return.py
+│       ├── company_explorer.py
+│       ├── price_chart.py
+│       ├── cumulative_returns.py
+│       ├── golden_cross.py
+│       ├── top_movers.py
+│       ├── valuation_comparison.py
+│       ├── data_quality_panel.py
+│       └── pipeline_health.py
+│
+├── docs/                             # Architecture diagram, dashboard screenshots
+│
+└── tests/                            # Python-level unit tests (ingestion logic)
 ```
 
 ## 🥉 Bronze Layer
