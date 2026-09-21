@@ -52,7 +52,6 @@ Alpha Vantage API
 └───────────────────┘      └──────────────────────┘
 ```
 ![Pipeline Architecture](docs/medallion_pipeline_architecture.png)
-*(See `Finance_Medallion_Pipeline\docs\medallion_pipeline_architecture.png` for the full diagram, including task-level Airflow detail.)*
 
 ## 🔄 End-to-End Data Flow
 
