@@ -175,6 +175,7 @@ Business-ready, star-schema modeled.
 - `fact_daily_returns` — daily return %, 20-day moving average, 20-day volatility, extreme-move flagging.
 - `agg_sector_rollup` — sector-level daily rollups, the table the dashboard's core business question is answered from.
 - `gold_pipeline_audit_log` — incremental table, appends one row per pipeline run with row counts and freshness, across every layer.
+  ![Gold_layer_properties](docs/gold_layer_checks_properties.png)
 
 ## 🧹 Data Quality Framework
 
